@@ -54,7 +54,7 @@ public class Player
 		ArrayList<String> victoryNames= new ArrayList<String>();		ArrayList<String> victoryTimes= new ArrayList<String>();
 		ArrayList<String> victoryShifts= new ArrayList<String>();		ArrayList<String> victoryResets= new ArrayList<String>();
 
-		victoryChapters.add("Chapters");							victoryLevels.add("Level");
+		victoryChapters.add("Chapter");							victoryLevels.add("Level");
 		victoryNames.add("Name");									victoryTimes.add("Time");
 		victoryShifts.add("Shifts");								victoryResets.add("Resets");
 
@@ -81,7 +81,7 @@ public class Player
 		ArrayList<String> deathNames= new ArrayList<String>();		ArrayList<String> deathHazards= new ArrayList<String>();
 		ArrayList<String> deathTimes= new ArrayList<String>();		ArrayList<String> deathLocation = new ArrayList<String>();
 
-		deathChapters.add("Chapters");							deathLevels.add("Level");
+		deathChapters.add("Chapter");							deathLevels.add("Level");
 		deathNames.add("Name");									deathHazards.add("Hazards");
 		deathTimes.add("Times");								deathLocation.add("Resets");
 
@@ -110,7 +110,7 @@ public class Player
 		ArrayList<String> resetNames= new ArrayList<String>();		ArrayList<String> resetOriginator= new ArrayList<String>();
 		ArrayList<String> resetTimes= new ArrayList<String>();		ArrayList<String> resetLocation = new ArrayList<String>();
 
-		resetChapters.add("Chapters");							resetLevels.add("Level");
+		resetChapters.add("Chapter");							resetLevels.add("Level");
 		resetNames.add("Name");									resetOriginator.add("Originator");
 		resetTimes.add("Times");								resetLocation.add("Location");
 
@@ -138,7 +138,7 @@ public class Player
 		ArrayList<String> tapsTimeStarts = new ArrayList<String>();	ArrayList<String> tapsTimeEnds= new ArrayList<String>();
 		ArrayList<String> tapsPosStart = new ArrayList<String>();	ArrayList<String> tapsPosEnd = new ArrayList<String>();
 
-		tapsChapters.add("Chapters");								tapsLevels.add("Level");
+		tapsChapters.add("Chapter");								tapsLevels.add("Level");
 		tapsNames.add("Name");										tapsSwipes.add("Swipes");
 		tapsTimeStarts.add("Time Start");							tapsTimeEnds.add("Time Ends");
 		tapsPosStart.add("Position Start");							tapsPosEnd.add("Position Ends");

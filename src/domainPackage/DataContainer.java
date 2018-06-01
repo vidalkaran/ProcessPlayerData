@@ -1,15 +1,16 @@
 package domainPackage;
 
-import java.util.Arrays;
 
 public class DataContainer 
 {
-	int Chapter;
-	int LevelNum;
+	int chapter;
+	int levelNum;
 	String levelName;
 	
-	public int getChapter() {return Chapter;}
-	public int getLevelNum() {return LevelNum;}
+	public int getChapter() {
+		//System.out.println("THIS IS THE CHAPTER: "+chapter);
+		return chapter;}
+	public int getLevelNum() {return levelNum;}
 	public String getLevelName() {return levelName;}
 
 }

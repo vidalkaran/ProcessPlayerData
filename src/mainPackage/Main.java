@@ -20,7 +20,8 @@ public class Main
 	}
 	catch(Exception e)
 	{
-		System.out.println("Fail");
+		System.out.println("Fail: "+e);
+		e.printStackTrace();
 		JOptionPane.showMessageDialog(null, "File not found. Check the data directory.");
 	}
 	}

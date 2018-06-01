@@ -3,12 +3,8 @@ package mainPackage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +14,7 @@ import domainPackage.Player;
 public class JSONProcessor
 {			
 	//Map of filenames to playerdata
-	Map<String, Player> playerData = new HashMap<String, Player>();
+	Map<String, Player> playerData = new TreeMap<String, Player>();
 
 	public JSONProcessor() throws FileNotFoundException
 	{

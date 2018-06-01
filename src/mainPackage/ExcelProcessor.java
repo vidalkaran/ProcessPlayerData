@@ -46,20 +46,95 @@ public class ExcelProcessor
 				"Chapter", "LevelNum", "LevelName", "isSwipe", "TimeStart", "TimeEnd", "PositionStart", "PositionEnd"
 		};
 	
+	XSSFCellStyle victoryStyle;
+	XSSFCellStyle deathStyle;
+	XSSFCellStyle resetStyle;
+	XSSFCellStyle tapsStyle;
+
+	XSSFCellStyle victoryHeader;
+	XSSFCellStyle deathHeader;
+	XSSFCellStyle resetHeader;
+	XSSFCellStyle tapsHeader;
+
 	XSSFWorkbook workbook;
+	XSSFFont font;
+	boolean stylesCreated = false;
 	
 	//Constructor takes in a map players, where the key is the directory location in plain text, and generates a folder array
 	public ExcelProcessor(Map<String, Player> inputPlayers)
 	{
 		playerData = inputPlayers;
-		
+
 		//populate foldernames array... use a set to ensure no duplicates
 		Set<String> set = new HashSet<String>();
 
 		for(String key : playerData.keySet())
 			set.add(StringUtils.split(key, "\\")[0]);
 		
-		folderNames = set.toArray(new String[set.size()]);		
+		folderNames = set.toArray(new String[set.size()]);
+	}
+	
+	public void setDefaultStyle(XSSFCellStyle style, boolean isHeader)
+	{
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		style.setBorderBottom(BorderStyle.THIN);
+		style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderLeft(BorderStyle.THIN);
+		style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderRight(BorderStyle.THIN);
+		style.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		style.setBorderTop(BorderStyle.DASHED);
+		style.setTopBorderColor(IndexedColors.BLACK.getIndex());		
+				
+		if(isHeader)
+		{
+			font.setBold(true);
+			style.setFont(font);
+			style.setAlignment(HorizontalAlignment.CENTER);
+		}
+	}
+	
+	public void createStyles()
+	{	
+			font = workbook.createFont();
+			victoryStyle = workbook.createCellStyle();
+			deathStyle = workbook.createCellStyle();
+			resetStyle = workbook.createCellStyle();
+			tapsStyle = workbook.createCellStyle();
+
+			victoryHeader = workbook.createCellStyle();
+			deathHeader = workbook.createCellStyle();
+			resetHeader = workbook.createCellStyle();
+			tapsHeader = workbook.createCellStyle();
+
+			//Define format of all styles
+			setDefaultStyle(victoryStyle, false);
+			victoryStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+			
+			setDefaultStyle(deathStyle, false);
+			deathStyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+	
+			setDefaultStyle(resetStyle, false);
+			resetStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+	
+			setDefaultStyle(tapsStyle, false);
+			tapsStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+			
+			//Headers
+			
+			setDefaultStyle(victoryHeader, true);
+			victoryHeader.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+			
+			setDefaultStyle(deathHeader, true);
+			deathHeader.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+	
+			setDefaultStyle(resetHeader, true);
+			resetHeader.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+	
+			setDefaultStyle(tapsHeader, true);
+			tapsHeader.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+			
+			System.out.println("STYLESCREATED");
 	}
 	
 	public void execute()
@@ -77,6 +152,9 @@ public class ExcelProcessor
 			//Create workbook
 			workbook = new XSSFWorkbook();
 			
+			//define cell styles
+			createStyles();
+			
 			//Write sheets
 			writeExcelSheet(folderName);
 			
@@ -88,17 +166,19 @@ public class ExcelProcessor
 				e.printStackTrace();
 			}
 		}
+		
+		createStyles();
 	}
 	
 	//Generates cells and writes playerdata to cell... also handles some formatting because of lack of foresight :]
 	public void writePlayer(XSSFSheet sheet, Player player)
-	{
+	{		
 		ArrayList<ArrayList<String>> playerData = player.getAllData();
-		XSSFCell[][] cellArray = new XSSFCell[500][500];
 		int rows = player.rowMax+1;
-		//int rows = 500;
-
 		int columns = playerData.size();
+
+		XSSFCell[][] cellArray = new XSSFCell[rows][columns];
+
 		System.out.println(rows + "..." + columns);
 		
 		//Generate cell array based on rows and columns from playerdata
@@ -142,46 +222,39 @@ public class ExcelProcessor
 	//Used to format all cells
 	public void setFormatting(XSSFCell cell)
 	{
-		XSSFCellStyle style = workbook.createCellStyle();
-		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-	    style.setBorderBottom(BorderStyle.THIN);
-	    style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-	    style.setBorderLeft(BorderStyle.THIN);
-	    style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-	    style.setBorderRight(BorderStyle.THIN);
-	    style.setRightBorderColor(IndexedColors.BLACK.getIndex());
-	    style.setBorderTop(BorderStyle.DASHED);
-	    style.setTopBorderColor(IndexedColors.BLACK.getIndex());
-
-		XSSFFont font = workbook.createFont();
-		font.setBold(true);
-
+		boolean isHeader = false;
+		
 		//check is cell is a header cell
 		if(cell.getRowIndex() <= 1)
-		{
-			style.setFont(font);
-			style.setAlignment(HorizontalAlignment.CENTER);
-		}
-		
+			isHeader = true;
+			
 		if(cell.getColumnIndex() <= 5)
 		{
-			style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-			cell.setCellStyle(style);
+			if(isHeader)
+				cell.setCellStyle(victoryHeader);
+			else
+				cell.setCellStyle(victoryStyle);
 		}
 		else if(cell.getColumnIndex() >= 6 && cell.getColumnIndex() <= 11)
 		{
-			style.setFillForegroundColor(IndexedColors.CORAL.getIndex());
-			cell.setCellStyle(style);
+			if(isHeader)
+				cell.setCellStyle(deathHeader);
+			else
+				cell.setCellStyle(deathStyle);
 		}
 		else if(cell.getColumnIndex() >= 12 && cell.getColumnIndex() <= 17)
 		{
-			style.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
-			cell.setCellStyle(style);
+			if(isHeader)
+				cell.setCellStyle(resetHeader);
+			else
+				cell.setCellStyle(resetStyle);
 		}
 		else if(cell.getColumnIndex() >= 18 && cell.getColumnIndex() <= 25)
 		{
-			style.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-			cell.setCellStyle(style);
+			if(isHeader)
+				cell.setCellStyle(tapsHeader);
+			else
+				cell.setCellStyle(tapsStyle);
 		}
 
 	}
